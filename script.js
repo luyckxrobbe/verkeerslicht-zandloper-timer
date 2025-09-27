@@ -35,8 +35,8 @@ class TrafficLightTimer {
         if (this.isRunning) return;
         
         const minutes = parseInt(this.timeInput.value);
-        if (minutes < 1 || minutes > 59) {
-            alert('Voer een tijd in tussen 1 en 59 minuten!');
+        if (minutes < 1) {
+            alert('Voer een tijd in van minimaal 1 minuut!');
             return;
         }
         
@@ -50,7 +50,7 @@ class TrafficLightTimer {
         
         // Start met rood licht
         this.setTrafficLight('red');
-        this.statusText.textContent = 'Ik werk in stilte, ik stoor de juf niet.';
+        this.statusText.textContent = 'Ik stoor de juf niet!';
         
         // Start zandloper animatie
         this.startHourglassAnimation();
