@@ -30,6 +30,7 @@ class TrafficLightTimer {
         this.task2Notes = document.getElementById('task2-notes');
         this.task3Notes = document.getElementById('task3-notes');
         
+        
         // Scroll indicator
         this.scrollIndicator = document.getElementById('scroll-indicator');
         this.scrollTimer = null;

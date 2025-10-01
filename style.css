@@ -251,6 +251,7 @@ h2 { display: none; }
     background: white;
     cursor: pointer;
     min-width: 180px;
+    text-transform: capitalize;
 }
 
 .task-control-item select:focus {
