@@ -1,0 +1,21 @@
+{
+  "name": "mama-verkeerslicht",
+  "version": "1.0.0",
+  "description": "A traffic light and hourglass timer for children",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=8000 --open=/index.html --watch=.",
+    "start": "live-server --port=8000 --open=/index.html"
+  },
+  "keywords": [
+    "traffic-light",
+    "timer",
+    "children",
+    "education"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

@@ -14,6 +14,23 @@ class TrafficLightTimer {
         this.sandAnimation = document.querySelector('#sand animate[attributeName="d"]');
         this.sandFillAnimation = document.querySelector('#sand animate[attributeName="fill"]');
         
+        // Taak elementen
+        this.task1Select = document.getElementById('task1-select');
+        this.task2Select = document.getElementById('task2-select');
+        this.task3Select = document.getElementById('task3-select');
+        this.task1Display = document.getElementById('task1-display');
+        this.task2Display = document.getElementById('task2-display');
+        this.task3Display = document.getElementById('task3-display');
+        this.task1Item = document.getElementById('task1-item');
+        this.task2Item = document.getElementById('task2-item');
+        this.task3Item = document.getElementById('task3-item');
+        
+        // Pagina range elementen
+        this.task1PageFrom = document.getElementById('task1-page-from');
+        this.task1PageTo = document.getElementById('task1-page-to');
+        this.task2PageFrom = document.getElementById('task2-page-from');
+        this.task2PageTo = document.getElementById('task2-page-to');
+        
         this.timer = null;
         this.timeLeft = 0;
         this.totalTime = 0;
@@ -26,9 +43,85 @@ class TrafficLightTimer {
         this.startButton.addEventListener('click', () => this.startTimer());
         this.stopButton.addEventListener('click', () => this.stopTimer());
         
+        // Taak dropdown listeners
+        this.task1Select.addEventListener('change', () => this.updateTaskDisplay(1));
+        this.task2Select.addEventListener('change', () => this.updateTaskDisplay(2));
+        this.task3Select.addEventListener('change', () => this.updateTaskDisplay(3));
+        
+        // Pagina range listeners
+        this.task1PageFrom.addEventListener('input', () => this.updateTaskDisplay(1));
+        this.task1PageTo.addEventListener('input', () => this.updateTaskDisplay(1));
+        this.task2PageFrom.addEventListener('input', () => this.updateTaskDisplay(2));
+        this.task2PageTo.addEventListener('input', () => this.updateTaskDisplay(2));
+        
         // Start met groen licht
         this.setTrafficLight('green');
         this.statusText.textContent = 'Ik steek mijn vinger op als ik de juf nodig heb.';
+        
+        // Initialize task displays
+        this.updateTaskDisplay(1);
+        this.updateTaskDisplay(2);
+        this.updateTaskDisplay(3);
+    }
+    
+    updateTaskDisplay(taskNumber) {
+        let select, display, pageFrom, pageTo, taskItem;
+        
+        switch(taskNumber) {
+            case 1:
+                select = this.task1Select;
+                display = this.task1Display;
+                pageFrom = this.task1PageFrom;
+                pageTo = this.task1PageTo;
+                taskItem = this.task1Item;
+                break;
+            case 2:
+                select = this.task2Select;
+                display = this.task2Display;
+                pageFrom = this.task2PageFrom;
+                pageTo = this.task2PageTo;
+                taskItem = this.task2Item;
+                break;
+            case 3:
+                select = this.task3Select;
+                display = this.task3Display;
+                pageFrom = null;
+                pageTo = null;
+                taskItem = this.task3Item;
+                break;
+        }
+        
+        const selectedValue = select.value;
+        
+        if (selectedValue === '') {
+            // Geen taak geselecteerd - verberg het hele vakje
+            taskItem.style.display = 'none';
+            display.innerHTML = '';
+        } else {
+            // Toon het vakje
+            taskItem.style.display = 'flex';
+            
+            // Toon de afbeelding
+            let html = `<div class="task-display-wrapper">
+                <img src="${selectedValue}" alt="Taak ${taskNumber}">`;
+            
+            // Voeg pagina range toe als deze bestaat (voor taak 1 en 2)
+            if (pageFrom && pageTo) {
+                const fromValue = pageFrom.value;
+                const toValue = pageTo.value;
+                
+                if (fromValue && toValue) {
+                    html += `<div class="task-page-range">Pagina's ${fromValue} - ${toValue}</div>`;
+                } else if (fromValue) {
+                    html += `<div class="task-page-range">Vanaf pagina ${fromValue}</div>`;
+                } else if (toValue) {
+                    html += `<div class="task-page-range">Tot pagina ${toValue}</div>`;
+                }
+            }
+            
+            html += `</div>`;
+            display.innerHTML = html;
+        }
     }
     
     startTimer() {

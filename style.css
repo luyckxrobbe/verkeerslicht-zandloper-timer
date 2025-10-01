@@ -11,7 +11,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 10px;
 }
 
 .container {
@@ -19,7 +19,7 @@ body {
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    max-width: 1000px;
+    max-width: 1400px;
     width: 100%;
 }
 
@@ -32,7 +32,7 @@ h1 { display: none; }
     justify-content: space-between;
 }
 
-.traffic-light-section, .hourglass-section, .silence-section {
+.traffic-light-section, .hourglass-section, .silence-section, .chalkboard-section {
     flex: 1;
     text-align: center;
     display: flex;
@@ -193,7 +193,86 @@ h2 { display: none; }
 }
 
 .controls {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.task-controls {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 15px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.task-control-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.task-control-item label {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #333;
+}
+
+.task-control-item select {
+    padding: 6px 10px;
+    font-size: 0.9em;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-family: inherit;
+    background: white;
+    cursor: pointer;
+    min-width: 180px;
+}
+
+.task-control-item select:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.page-range {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.page-range label {
+    font-size: 0.85em;
+    font-weight: normal;
+    color: #666;
+}
+
+.page-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-inputs input[type="number"] {
+    width: 60px;
+    padding: 4px 6px;
+    font-size: 0.9em;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    text-align: center;
+}
+
+.page-inputs input[type="number"]:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.page-inputs span {
+    color: #666;
+    font-weight: bold;
 }
 
 .time-controls {
@@ -273,6 +352,146 @@ button:disabled {
     font-family: 'Courier New', monospace;
 }
 
+/* Krijtbord styling */
+.chalkboard {
+    position: relative;
+    background-color: #3d6b1f;
+    background-image: 
+        /* Houten border effect */
+        linear-gradient(90deg, 
+            #8B4513 0%, 
+            #A0522D 5%, 
+            #8B4513 10%, 
+            transparent 10%, 
+            transparent 90%,
+            #8B4513 90%,
+            #A0522D 95%,
+            #8B4513 100%),
+        linear-gradient(0deg, 
+            #8B4513 0%, 
+            #A0522D 5%, 
+            #8B4513 10%, 
+            transparent 10%, 
+            transparent 90%,
+            #8B4513 90%,
+            #A0522D 95%,
+            #8B4513 100%);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 
+        0 8px 16px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.chalkboard::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    background: 
+        /* Groene krijtbord achtergrond met textuur */
+        linear-gradient(135deg, #2d5016 0%, #3d6b1f 50%, #2d5016 100%),
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 255, 255, 0.02) 2px,
+            rgba(255, 255, 255, 0.02) 4px
+        );
+    border-radius: 3px;
+    box-shadow: 
+        inset 0 0 30px rgba(0, 0, 0, 0.3),
+        inset 0 0 100px rgba(0, 0, 0, 0.2);
+}
+
+.chalkboard::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    background: 
+        radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.1) 100%);
+    pointer-events: none;
+}
+
+.chalkboard-content {
+    position: relative;
+    z-index: 1;
+    color: #f0f0e8;
+    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
+    text-align: center;
+    padding: 30px;
+    min-width: 280px;
+    min-height: 200px;
+    text-shadow: 
+        1px 1px 2px rgba(255, 255, 255, 0.1),
+        0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+.task-item {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.task-item:last-child {
+    margin-bottom: 0;
+}
+
+.task-number {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 
+        2px 2px 3px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(255, 255, 255, 0.2);
+    min-width: 30px;
+    padding-top: 5px;
+}
+
+.task-display {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    padding: 10px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    flex: 1;
+}
+
+.task-display img {
+    max-width: 100%;
+    max-height: 120px;
+    object-fit: contain;
+    border-radius: 3px;
+}
+
+
+.task-display-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.task-page-range {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-shadow: 
+        1px 1px 2px rgba(0, 0, 0, 0.3),
+        0 0 8px rgba(255, 215, 0, 0.3);
+    margin-top: 5px;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .main-content {
@@ -311,5 +530,37 @@ button:disabled {
     .silence-image {
         width: 225px;
         height: 225px;
+    }
+    
+    .chalkboard-content {
+        padding: 20px;
+        min-width: 200px;
+    }
+    
+    .task-number {
+        font-size: 1.4em;
+        min-width: 25px;
+    }
+    
+    .task-display {
+        min-height: 60px;
+    }
+    
+    .task-display img {
+        max-height: 80px;
+    }
+    
+    .task-controls {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .task-control-item {
+        width: 100%;
+        align-items: stretch;
+    }
+    
+    .task-control-item select {
+        min-width: 100%;
     }
 }

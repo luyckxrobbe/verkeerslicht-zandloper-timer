@@ -66,6 +66,26 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Krijtbord sectie -->
+            <div class="chalkboard-section">
+                <div class="chalkboard">
+                    <div class="chalkboard-content">
+                        <div id="task1-item" class="task-item" style="display: none;">
+                            <div class="task-number">1.</div>
+                            <div id="task1-display" class="task-display"></div>
+                        </div>
+                        <div id="task2-item" class="task-item" style="display: none;">
+                            <div class="task-number">2.</div>
+                            <div id="task2-display" class="task-display"></div>
+                        </div>
+                        <div id="task3-item" class="task-item" style="display: none;">
+                            <div class="task-number">3.</div>
+                            <div id="task3-display" class="task-display"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Globale tijds- en bedieningssectie -->
@@ -76,7 +96,46 @@
                     <span>min</span>
                     <button id="global-start">Start</button>
                     <button id="global-stop" disabled>Stop</button>
-                    <button id="global-reset">Reset</button>
+                </div>
+            </div>
+            
+            <div class="task-controls">
+                <div class="task-control-item">
+                    <label for="task1-select">Taak 1 (Werkboek):</label>
+                    <select id="task1-select">
+                        <option value="">-- Geen --</option>
+                        <option value="werkboeken/werkboek1.jpg">Werkboek 1</option>
+                    </select>
+                    <div class="page-range">
+                        <label>Pagina's:</label>
+                        <div class="page-inputs">
+                            <input type="number" id="task1-page-from" placeholder="van" min="1" />
+                            <span>-</span>
+                            <input type="number" id="task1-page-to" placeholder="tot" min="1" />
+                        </div>
+                    </div>
+                </div>
+                <div class="task-control-item">
+                    <label for="task2-select">Taak 2 (Leesboek):</label>
+                    <select id="task2-select">
+                        <option value="">-- Geen --</option>
+                        <option value="leesboeken/leesboek1.jpg">Leesboek 1</option>
+                    </select>
+                    <div class="page-range">
+                        <label>Pagina's:</label>
+                        <div class="page-inputs">
+                            <input type="number" id="task2-page-from" placeholder="van" min="1" />
+                            <span>-</span>
+                            <input type="number" id="task2-page-to" placeholder="tot" min="1" />
+                        </div>
+                    </div>
+                </div>
+                <div class="task-control-item">
+                    <label for="task3-select">Taak 3 (Extra):</label>
+                    <select id="task3-select">
+                        <option value="">-- Geen --</option>
+                        <option value="extra/kleurpotloden.png">Kleurpotloden</option>
+                    </select>
                 </div>
             </div>
         </div>
