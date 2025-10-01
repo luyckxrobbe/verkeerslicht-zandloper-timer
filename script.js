@@ -81,67 +81,26 @@ class TrafficLightTimer {
             { folder: 'extra', select: this.task3Select, prefix: 'Extra' }
         ];
         
+        // For GitHub Pages, we'll use the fallback options directly since directory listing is not available
+        // This is more reliable and works consistently across different hosting platforms
         for (const { folder, select, prefix } of folders) {
-            try {
-                // Try to fetch the folder contents
-                const response = await fetch(`/${folder}/`);
-                if (response.ok) {
-                    const html = await response.text();
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
-                    const links = doc.querySelectorAll('a[href]');
-                    
-                    links.forEach(link => {
-                        const fileName = link.getAttribute('href');
-                        // Only include actual files (not directories or special entries)
-                        if (fileName && 
-                            !fileName.endsWith('/') && 
-                            !fileName.startsWith('.') && 
-                            fileName !== '../' &&
-                            fileName !== './' &&
-                            fileName.includes('.')) { // Must have a file extension
-                            const option = document.createElement('option');
-                            // Decode the filename first
-                            const decodedFileName = decodeURIComponent(fileName);
-                            
-                            // Check if the filename already includes the folder path
-                            let finalPath;
-                            if (decodedFileName.startsWith(`/${folder}/`) || decodedFileName.startsWith(`${folder}/`)) {
-                                // Already includes folder path, remove leading slash if present
-                                finalPath = decodedFileName.startsWith('/') ? decodedFileName.substring(1) : decodedFileName;
-                            } else {
-                                // Add folder path
-                                finalPath = `${folder}/${decodedFileName}`;
-                            }
-                            
-                            option.value = finalPath;
-                            // Remove file extension for display - only show filename without path
-                            const fileNameOnly = decodedFileName.split('/').pop(); // Get just the filename
-                            const cleanName = fileNameOnly.replace(/\.[^/.]+$/, ""); // Remove extension
-                            option.textContent = cleanName;
-                            select.appendChild(option);
-                        }
-                    });
-                } else {
-                    // Fallback: add some default options based on what we know exists
-                    this.addFallbackOptions(folder, select, prefix);
-                }
-            } catch (error) {
-                console.log(`Could not load files from ${folder}, using fallback options`);
-                this.addFallbackOptions(folder, select, prefix);
-            }
+            this.addFallbackOptions(folder, select, prefix);
         }
     }
     
     addFallbackOptions(folder, select, prefix) {
-        // Add known files as fallback
+        // Add known files as fallback - updated to match actual files
         const knownFiles = {
             'werkboeken': [
                 'Werkboekje 1.jpg', 'Werkboekje 2.jpg', 'Werkboekje 3.jpg', 
                 'Werkboekje 4.jpg', 'Werkboekje 5.jpg', 'Werkboekje 6.jpg',
                 'Werkboekje 7.jpg', 'Werkboekje 8.jpg', 'Werkboekje 9.jpg'
             ],
-            'leesboeken': ['leesboek1.jpg'],
+            'leesboeken': [
+                'Leesboekje 1.jpg', 'Leesboekje 2.jpg', 'Leesboekje 3.jpg',
+                'Leesboekje 4.jpg', 'Leesboekje 5.jpg', 'Leesboekje 6.jpg',
+                'Leesboekje 7.jpg', 'Leesboekje 8.jpg', 'Leesboekje 9.jpg'
+            ],
             'extra': ['kleurpotloden.png']
         };
         
