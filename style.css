@@ -7,11 +7,10 @@
 body {
     font-family: 'Comic Sans MS', cursive, sans-serif;
     background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
-    min-height: 100vh;
+    min-height: calc(100vh + 600px); /* Just enough space for main container + controls */
+    padding: 0;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
+    flex-direction: column;
 }
 
 .container {
@@ -20,7 +19,15 @@ body {
     padding: 30px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     max-width: 1400px;
-    width: 100%;
+    width: calc(100% - 40px);
+    margin: 0 auto;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
 }
 
 h1 { display: none; }
@@ -187,9 +194,24 @@ h2 { display: none; }
 }
 
 /* Controls styling */
-.global-controls {
-    margin-top: 20px;
+.controls-container {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 1400px;
+    width: calc(100% - 40px);
+    margin: calc(100vh + 20px) auto 20px auto; /* Start controls after viewport height + some spacing */
+    position: relative;
+    z-index: 5;
+}
+
+.controls-content h3 {
     text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 .controls {
@@ -484,6 +506,17 @@ button:disabled {
 
 /* Responsive design */
 @media (max-width: 768px) {
+    .container {
+        width: calc(100% - 20px);
+        padding: 20px;
+        margin: 0 auto;
+        max-height: calc(100vh - 20px);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
     .main-content {
         flex-direction: column;
         gap: 30px;
@@ -552,5 +585,98 @@ button:disabled {
     
     .task-control-item select {
         min-width: 100%;
+    }
+    
+    .controls-container {
+        width: calc(100% - 20px);
+        padding: 20px;
+        margin: calc(100vh + 10px) auto 10px auto;
+    }
+    
+    .controls-content h3 {
+        font-size: 1.3em;
+        margin-bottom: 15px;
+    }
+}
+
+/* Scroll indicator styling */
+.scroll-indicator {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 60px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 20;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    border: 3px solid #4CAF50;
+    padding: 0 20px;
+}
+
+.scroll-indicator.visible {
+    opacity: 1;
+    visibility: visible;
+    animation: bounce 2s infinite;
+}
+
+.scroll-indicator:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.scroll-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.scroll-text {
+    font-size: 14px;
+    color: #4CAF50;
+    font-weight: bold;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.scroll-arrow {
+    font-size: 20px;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* Responsive scroll indicator */
+@media (max-width: 768px) {
+    .scroll-indicator {
+        width: 160px;
+        height: 50px;
+        bottom: 20px;
+    }
+    
+    .scroll-text {
+        font-size: 12px;
+    }
+    
+    .scroll-arrow {
+        font-size: 18px;
     }
 }

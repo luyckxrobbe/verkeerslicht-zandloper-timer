@@ -30,6 +30,11 @@ class TrafficLightTimer {
         this.task2Notes = document.getElementById('task2-notes');
         this.task3Notes = document.getElementById('task3-notes');
         
+        // Scroll indicator
+        this.scrollIndicator = document.getElementById('scroll-indicator');
+        this.scrollTimer = null;
+        this.hasScrolled = false;
+        
         this.timer = null;
         this.timeLeft = 0;
         this.totalTime = 0;
@@ -38,7 +43,9 @@ class TrafficLightTimer {
         this.init();
     }
     
-    init() {
+    async init() {
+        // Load available files for each task type
+        await this.loadAvailableFiles();
         this.startButton.addEventListener('click', () => this.startTimer());
         this.stopButton.addEventListener('click', () => this.stopTimer());
         
@@ -60,6 +67,93 @@ class TrafficLightTimer {
         this.updateTaskDisplay(1);
         this.updateTaskDisplay(2);
         this.updateTaskDisplay(3);
+        
+        // Initialize scroll indicator
+        this.initScrollIndicator();
+    }
+    
+    async loadAvailableFiles() {
+        // Define the folders and their corresponding select elements
+        const folders = [
+            { folder: 'werkboeken', select: this.task1Select, prefix: 'Werkboekje' },
+            { folder: 'leesboeken', select: this.task2Select, prefix: 'Leesboek' },
+            { folder: 'extra', select: this.task3Select, prefix: 'Extra' }
+        ];
+        
+        for (const { folder, select, prefix } of folders) {
+            try {
+                // Try to fetch the folder contents
+                const response = await fetch(`/${folder}/`);
+                if (response.ok) {
+                    const html = await response.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const links = doc.querySelectorAll('a[href]');
+                    
+                    links.forEach(link => {
+                        const fileName = link.getAttribute('href');
+                        // Only include actual files (not directories or special entries)
+                        if (fileName && 
+                            !fileName.endsWith('/') && 
+                            !fileName.startsWith('.') && 
+                            fileName !== '../' &&
+                            fileName !== './' &&
+                            fileName.includes('.')) { // Must have a file extension
+                            const option = document.createElement('option');
+                            // Decode the filename first
+                            const decodedFileName = decodeURIComponent(fileName);
+                            
+                            // Check if the filename already includes the folder path
+                            let finalPath;
+                            if (decodedFileName.startsWith(`/${folder}/`) || decodedFileName.startsWith(`${folder}/`)) {
+                                // Already includes folder path, remove leading slash if present
+                                finalPath = decodedFileName.startsWith('/') ? decodedFileName.substring(1) : decodedFileName;
+                            } else {
+                                // Add folder path
+                                finalPath = `${folder}/${decodedFileName}`;
+                            }
+                            
+                            option.value = finalPath;
+                            // Remove file extension for display - only show filename without path
+                            const fileNameOnly = decodedFileName.split('/').pop(); // Get just the filename
+                            const cleanName = fileNameOnly.replace(/\.[^/.]+$/, ""); // Remove extension
+                            option.textContent = cleanName;
+                            select.appendChild(option);
+                        }
+                    });
+                } else {
+                    // Fallback: add some default options based on what we know exists
+                    this.addFallbackOptions(folder, select, prefix);
+                }
+            } catch (error) {
+                console.log(`Could not load files from ${folder}, using fallback options`);
+                this.addFallbackOptions(folder, select, prefix);
+            }
+        }
+    }
+    
+    addFallbackOptions(folder, select, prefix) {
+        // Add known files as fallback
+        const knownFiles = {
+            'werkboeken': [
+                'Werkboekje 1.jpg', 'Werkboekje 2.jpg', 'Werkboekje 3.jpg', 
+                'Werkboekje 4.jpg', 'Werkboekje 5.jpg', 'Werkboekje 6.jpg',
+                'Werkboekje 7.jpg', 'Werkboekje 8.jpg', 'Werkboekje 9.jpg'
+            ],
+            'leesboeken': ['leesboek1.jpg'],
+            'extra': ['kleurpotloden.png']
+        };
+        
+        const files = knownFiles[folder] || [];
+        files.forEach(fileName => {
+            const option = document.createElement('option');
+            const finalPath = `${folder}/${fileName}`;
+            option.value = finalPath;
+            // Remove file extension for display - only show filename
+            const cleanName = fileName.replace(/\.[^/.]+$/, "");
+            option.textContent = cleanName;
+            select.appendChild(option);
+        });
     }
     
     updateTaskDisplay(taskNumber) {
@@ -161,6 +255,9 @@ class TrafficLightTimer {
         
         // Start zandloper animatie
         this.startHourglassAnimation();
+        
+        // Scroll naar boven om main container te centreren
+        this.scrollToTop();
         
         // Start timer
         this.timer = setInterval(() => {
@@ -270,6 +367,52 @@ class TrafficLightTimer {
         
         oscillator.start(audioContext.currentTime);
         oscillator.stop(audioContext.currentTime + 0.5);
+    }
+    
+    initScrollIndicator() {
+        // Start timer to show scroll indicator after 5 seconds
+        this.scrollTimer = setTimeout(() => {
+            if (!this.hasScrolled) {
+                this.showScrollIndicator();
+            }
+        }, 5000);
+        
+        // Listen for scroll events
+        window.addEventListener('scroll', () => {
+            this.hasScrolled = true;
+            this.hideScrollIndicator();
+        });
+        
+        // Add click listener to scroll indicator
+        this.scrollIndicator.addEventListener('click', () => {
+            this.scrollToControls();
+        });
+    }
+    
+    showScrollIndicator() {
+        this.scrollIndicator.classList.add('visible');
+    }
+    
+    hideScrollIndicator() {
+        this.scrollIndicator.classList.remove('visible');
+    }
+    
+    scrollToControls() {
+        const controlsContainer = document.querySelector('.controls-container');
+        if (controlsContainer) {
+            controlsContainer.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+            this.hideScrollIndicator();
+        }
+    }
+    
+    scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     }
 }
 
