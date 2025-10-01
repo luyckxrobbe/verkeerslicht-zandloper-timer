@@ -25,11 +25,10 @@ class TrafficLightTimer {
         this.task2Item = document.getElementById('task2-item');
         this.task3Item = document.getElementById('task3-item');
         
-        // Pagina range elementen
-        this.task1PageFrom = document.getElementById('task1-page-from');
-        this.task1PageTo = document.getElementById('task1-page-to');
-        this.task2PageFrom = document.getElementById('task2-page-from');
-        this.task2PageTo = document.getElementById('task2-page-to');
+        // Notitie velden
+        this.task1Notes = document.getElementById('task1-notes');
+        this.task2Notes = document.getElementById('task2-notes');
+        this.task3Notes = document.getElementById('task3-notes');
         
         this.timer = null;
         this.timeLeft = 0;
@@ -48,11 +47,10 @@ class TrafficLightTimer {
         this.task2Select.addEventListener('change', () => this.updateTaskDisplay(2));
         this.task3Select.addEventListener('change', () => this.updateTaskDisplay(3));
         
-        // Pagina range listeners
-        this.task1PageFrom.addEventListener('input', () => this.updateTaskDisplay(1));
-        this.task1PageTo.addEventListener('input', () => this.updateTaskDisplay(1));
-        this.task2PageFrom.addEventListener('input', () => this.updateTaskDisplay(2));
-        this.task2PageTo.addEventListener('input', () => this.updateTaskDisplay(2));
+        // Notities listeners
+        this.task1Notes.addEventListener('input', () => this.updateTaskDisplay(1));
+        this.task2Notes.addEventListener('input', () => this.updateTaskDisplay(2));
+        this.task3Notes.addEventListener('input', () => this.updateTaskDisplay(3));
         
         // Start met groen licht
         this.setTrafficLight('green');
@@ -65,28 +63,25 @@ class TrafficLightTimer {
     }
     
     updateTaskDisplay(taskNumber) {
-        let select, display, pageFrom, pageTo, taskItem;
+        let select, display, notesField, taskItem;
         
         switch(taskNumber) {
             case 1:
                 select = this.task1Select;
                 display = this.task1Display;
-                pageFrom = this.task1PageFrom;
-                pageTo = this.task1PageTo;
+                notesField = this.task1Notes;
                 taskItem = this.task1Item;
                 break;
             case 2:
                 select = this.task2Select;
                 display = this.task2Display;
-                pageFrom = this.task2PageFrom;
-                pageTo = this.task2PageTo;
+                notesField = this.task2Notes;
                 taskItem = this.task2Item;
                 break;
             case 3:
                 select = this.task3Select;
                 display = this.task3Display;
-                pageFrom = null;
-                pageTo = null;
+                notesField = this.task3Notes;
                 taskItem = this.task3Item;
                 break;
         }
@@ -105,23 +100,42 @@ class TrafficLightTimer {
             let html = `<div class="task-display-wrapper">
                 <img src="${selectedValue}" alt="Taak ${taskNumber}">`;
             
-            // Voeg pagina range toe als deze bestaat (voor taak 1 en 2)
-            if (pageFrom && pageTo) {
-                const fromValue = pageFrom.value;
-                const toValue = pageTo.value;
-                
-                if (fromValue && toValue) {
-                    html += `<div class="task-page-range">Pagina's ${fromValue} - ${toValue}</div>`;
-                } else if (fromValue) {
-                    html += `<div class="task-page-range">Vanaf pagina ${fromValue}</div>`;
-                } else if (toValue) {
-                    html += `<div class="task-page-range">Tot pagina ${toValue}</div>`;
+            // Voeg notities toe (voor taak 1 en 2)
+            if (notesField) {
+                const notes = notesField.value.trim();
+                if (notes) {
+                    html += `<div class=\"task-notes\">${this.escapeHtml(notes)}</div>`;
                 }
             }
             
             html += `</div>`;
             display.innerHTML = html;
         }
+
+        // Nummering updaten op basis van zichtbare taken
+        this.renumberVisibleTasks();
+    }
+
+    renumberVisibleTasks() {
+        const taskItems = [this.task1Item, this.task2Item, this.task3Item];
+        let currentNumber = 1;
+        taskItems.forEach((item) => {
+            const numberEl = item.querySelector('.task-number');
+            if (item.style.display !== 'none') {
+                if (numberEl) numberEl.textContent = `${currentNumber}.`;
+                currentNumber += 1;
+            }
+        });
+    }
+
+    // Eenvoudige HTML escaping voor gebruikersinvoer
+    escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/\"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
     
     startTimer() {
