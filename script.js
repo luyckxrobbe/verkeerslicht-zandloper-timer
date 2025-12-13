@@ -1,5 +1,9 @@
 class TrafficLightTimer {
     constructor() {
+        // Basis-URL voor assets: afgeleid van waar script.js vandaan komt
+        // Dit voorkomt kapotte relatieve paden (bv. wanneer de pagina-URL geen trailing '/' heeft).
+        this.assetsBaseUrl = this.getAssetsBaseUrl();
+
         this.timeInput = document.getElementById('minutes-input');
         this.startButton = document.getElementById('global-start');
         this.stopButton = document.getElementById('global-stop');
@@ -124,6 +128,31 @@ class TrafficLightTimer {
             select.appendChild(option);
         });
     }
+
+    getAssetsBaseUrl() {
+        // Probeer het script-element te vinden dat script.js laadt
+        const scripts = Array.from(document.querySelectorAll('script[src]'));
+        const scriptEl =
+            scripts.find(s => s.getAttribute('src') === 'script.js') ||
+            scripts.find(s => (s.getAttribute('src') || '').endsWith('/script.js')) ||
+            scripts.find(s => (s.getAttribute('src') || '').includes('script.js')) ||
+            null;
+
+        if (scriptEl && scriptEl.src) {
+            return new URL('.', scriptEl.src);
+        }
+
+        // Fallbacks
+        return new URL('.', document.baseURI);
+    }
+
+    resolveAssetUrl(relativePath) {
+        try {
+            return new URL(relativePath, this.assetsBaseUrl).toString();
+        } catch {
+            return relativePath;
+        }
+    }
     
     updateTaskDisplay(taskNumber) {
         let select, display, notesField, taskItem;
@@ -166,8 +195,9 @@ class TrafficLightTimer {
             taskItem.style.display = 'flex';
             
             // Toon de afbeelding
+            const imgSrc = this.resolveAssetUrl(selectedValue);
             let html = `<div class="task-display-wrapper">
-                <img src="${selectedValue}" alt="Taak ${taskNumber}">`;
+                <img src="${imgSrc}" alt="Taak ${taskNumber}">`;
             
             // Voeg notities toe (voor taak 1 en 2)
             if (notesField) {
