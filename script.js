@@ -18,17 +18,21 @@ class TrafficLightTimer {
         this.task1Select = document.getElementById('task1-select');
         this.task2Select = document.getElementById('task2-select');
         this.task3Select = document.getElementById('task3-select');
+        this.task4Select = document.getElementById('task4-select');
         this.task1Display = document.getElementById('task1-display');
         this.task2Display = document.getElementById('task2-display');
         this.task3Display = document.getElementById('task3-display');
+        this.task4Display = document.getElementById('task4-display');
         this.task1Item = document.getElementById('task1-item');
         this.task2Item = document.getElementById('task2-item');
         this.task3Item = document.getElementById('task3-item');
+        this.task4Item = document.getElementById('task4-item');
         
         // Notitie velden
         this.task1Notes = document.getElementById('task1-notes');
         this.task2Notes = document.getElementById('task2-notes');
         this.task3Notes = document.getElementById('task3-notes');
+        this.task4Notes = document.getElementById('task4-notes');
         
         
         // Scroll indicator
@@ -54,11 +58,13 @@ class TrafficLightTimer {
         this.task1Select.addEventListener('change', () => this.updateTaskDisplay(1));
         this.task2Select.addEventListener('change', () => this.updateTaskDisplay(2));
         this.task3Select.addEventListener('change', () => this.updateTaskDisplay(3));
+        this.task4Select.addEventListener('change', () => this.updateTaskDisplay(4));
         
         // Notities listeners
         this.task1Notes.addEventListener('input', () => this.updateTaskDisplay(1));
         this.task2Notes.addEventListener('input', () => this.updateTaskDisplay(2));
         this.task3Notes.addEventListener('input', () => this.updateTaskDisplay(3));
+        this.task4Notes.addEventListener('input', () => this.updateTaskDisplay(4));
         
         // Start met groen licht
         this.setTrafficLight('green');
@@ -68,6 +74,7 @@ class TrafficLightTimer {
         this.updateTaskDisplay(1);
         this.updateTaskDisplay(2);
         this.updateTaskDisplay(3);
+        this.updateTaskDisplay(4);
         
         // Initialize scroll indicator
         this.initScrollIndicator();
@@ -78,7 +85,8 @@ class TrafficLightTimer {
         const folders = [
             { folder: 'werkboeken', select: this.task1Select, prefix: 'Werkboekje' },
             { folder: 'leesboeken', select: this.task2Select, prefix: 'Leesboek' },
-            { folder: 'extra', select: this.task3Select, prefix: 'Extra' }
+            { folder: 'taak3', select: this.task3Select, prefix: 'Taak 3' },
+            { folder: 'extra', select: this.task4Select, prefix: 'Extra' }
         ];
         
         // For GitHub Pages, we'll use the fallback options directly since directory listing is not available
@@ -101,7 +109,8 @@ class TrafficLightTimer {
                 'Leesboekje 4.jpg', 'Leesboekje 5.jpg', 'Leesboekje 6.jpg',
                 'Leesboekje 7.jpg', 'Leesboekje 8.jpg', 'Leesboekje 9.jpg'
             ],
-            'extra': ['kleurpotloden.png']
+            'taak3': ['Splitsen tot 6.png'],
+            'extra': ['Kleurpotloden.png']
         };
         
         const files = knownFiles[folder] || [];
@@ -138,6 +147,12 @@ class TrafficLightTimer {
                 notesField = this.task3Notes;
                 taskItem = this.task3Item;
                 break;
+            case 4:
+                select = this.task4Select;
+                display = this.task4Display;
+                notesField = this.task4Notes;
+                taskItem = this.task4Item;
+                break;
         }
         
         const selectedValue = select.value;
@@ -171,7 +186,7 @@ class TrafficLightTimer {
     }
 
     renumberVisibleTasks() {
-        const taskItems = [this.task1Item, this.task2Item, this.task3Item];
+        const taskItems = [this.task1Item, this.task2Item, this.task3Item, this.task4Item];
         let currentNumber = 1;
         taskItems.forEach((item) => {
             const numberEl = item.querySelector('.task-number');
