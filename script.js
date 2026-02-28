@@ -113,7 +113,7 @@ class TrafficLightTimer {
                 'Leesboekje 4.jpg', 'Leesboekje 5.jpg', 'Leesboekje 6.jpg',
                 'Leesboekje 7.jpg', 'Leesboekje 8.jpg', 'Leesboekje 9.jpg'
             ],
-            'taak3': ['Splitsen tot 6.png', 'Rekenen maar 1b.png'],
+            'taak3': ['Splitsen tot 6.png', 'Rekenen maar 1b.png', 'Veilig gespeld.png'],
             'extra': ['Kleurpotloden.png']
         };
         
